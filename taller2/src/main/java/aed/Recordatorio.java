@@ -11,6 +11,14 @@ public class Recordatorio {
         _horario = horario;
     }
 
+
+    public Recordatorio(Recordatorio recordatorio) {
+        _mensaje = recordatorio.mensaje();
+        _fecha = recordatorio.fecha();
+        _horario = recordatorio.horario();
+    }
+
+
     public Horario horario() {
         return _horario;
     }

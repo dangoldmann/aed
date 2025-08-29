@@ -1,39 +1,49 @@
 package aed;
 
 class ArregloRedimensionableDeRecordatorios {
-
-    public ArregloRedimensionableDeRecordatorios() {
-        // Implementar
-    }
+    private Recordatorio[] _arreglo = new Recordatorio[0];
 
     public int longitud() {
-        // Implementar
-        return -1;
+        return _arreglo.length;
     }
 
     public void agregarAtras(Recordatorio i) {
-        // Implementar
+        Recordatorio[] nuevoArreglo = new Recordatorio[longitud() + 1];
+        for (int j = 0; j < longitud(); j++) {
+            nuevoArreglo[j] = _arreglo[j];
+        }
+        nuevoArreglo[longitud() + 1] = i;
+        _arreglo = nuevoArreglo;
     }
 
     public Recordatorio obtener(int i) {
-        // Implementar
-        return null;
+        return _arreglo[i];
     }
 
     public void quitarAtras() {
-        // Implementar
+        if (longitud() == 0) {
+            return;
+        }
+        Recordatorio[] nuevoArreglo = new Recordatorio[longitud() - 1];
+        for (int i = 0; i < longitud() - 1; i++) {
+            nuevoArreglo[i] = _arreglo[i];
+        }
+        _arreglo = nuevoArreglo;
     }
 
     public void modificarPosicion(int indice, Recordatorio valor) {
-        // Implementar
+        _arreglo[indice] = valor;
     }
 
     public ArregloRedimensionableDeRecordatorios(ArregloRedimensionableDeRecordatorios vector) {
-        // Implementar
+        Recordatorio[] nuevoArreglo = new Recordatorio[vector.longitud()];
+        for (int i = 0; i < vector.longitud(); i++) {
+            nuevoArreglo[i] = new Recordatorio(vector.obtener(i));
+        }
+        _arreglo = nuevoArreglo;
     }
 
     public ArregloRedimensionableDeRecordatorios copiar() {
-        // Implementar
-        return null;
+        return new ArregloRedimensionableDeRecordatorios(this);
     }
 }
