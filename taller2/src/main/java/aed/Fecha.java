@@ -1,37 +1,59 @@
 package aed;
 
 public class Fecha {
+    private int _dia;
+    private int _mes;
+
     public Fecha(int dia, int mes) {
-        // Implementar
+        _dia = dia;
+        _mes = mes;
     }
 
     public Fecha(Fecha fecha) {
-        // Implementar
+        _dia = fecha._dia;
+        _mes = fecha._mes;
     }
 
     public Integer dia() {
-        // Implementar
-        return -1;
+        return _dia;
     }
 
     public Integer mes() {
-        // Implementar
-        return -1;
+        return _mes;
     }
 
+    @Override
     public String toString() {
-        // Implementar
-        return "";
+        return _dia + "/" + _mes;
     }
 
     @Override
     public boolean equals(Object otra) {
-        // Implementar
-        return true;
+        boolean otraEsNull = otra == null;
+
+        if (otraEsNull) {
+            return false;
+        }
+
+        boolean claseDistinta = otra.getClass() != this.getClass();
+
+        if (claseDistinta) {
+            return false;
+        }
+        
+        Fecha otraFecha = (Fecha) otra;
+
+        return otraFecha._dia == _dia && otraFecha._mes == _mes;
     }
 
     public void incrementarDia() {
-        // Implementar
+        boolean esUltimoDiaDelMes = _dia == diasEnMes(_mes);
+        if (esUltimoDiaDelMes) {
+            _dia = 1;
+            _mes = _mes == 12 ? 1 : _mes + 1;
+            return;
+        } 
+        _dia += 1;
     }
 
     private int diasEnMes(int mes) {
