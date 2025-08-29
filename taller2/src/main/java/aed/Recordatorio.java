@@ -16,7 +16,7 @@ public class Recordatorio {
     }
 
     public Fecha fecha() {
-        return _fecha;
+        return new Fecha(_fecha);
     }
 
     public String mensaje() {
@@ -25,7 +25,7 @@ public class Recordatorio {
 
     @Override
     public String toString() {
-        return _mensaje + "@" + _fecha.toString() + _horario.toString();
+        return _mensaje + " @ " + _fecha.toString() + " " +_horario.toString();
     }
 
     @Override

@@ -10,8 +10,8 @@ public class Fecha {
     }
 
     public Fecha(Fecha fecha) {
-        _dia = fecha._dia;
-        _mes = fecha._mes;
+        _dia = fecha.dia();
+        _mes = fecha.mes();
     }
 
     public Integer dia() {
