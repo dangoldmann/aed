@@ -254,7 +254,7 @@ class ListaEnlazadaTests {
         ListaEnlazada<Integer> lista = new ListaEnlazada<>();
 
         ListaEnlazada<Integer>.ListaIterador it = lista.iterador();
-
+        
         assertFalse(it.haySiguiente());
         assertFalse(it.hayAnterior());
     }
