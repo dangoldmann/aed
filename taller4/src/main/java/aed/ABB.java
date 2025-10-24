@@ -33,14 +33,9 @@ public class ABB<T extends Comparable<T>> {
 
     public T minimo(){
         Nodo actual = raiz;
-        boolean hayAnterior = raiz.izq != null;
 
-        while (hayAnterior) {
-            if (actual.izq != null) {
+        while (actual.izq != null) {
                 actual = actual.izq;
-            } else {
-                hayAnterior = false;
-            }
         }
 
         return actual.valor;
@@ -48,14 +43,9 @@ public class ABB<T extends Comparable<T>> {
 
     public T maximo(){
         Nodo actual = raiz;
-        boolean haySiguiente = raiz.der != null;
 
-        while (haySiguiente) {
-            if (actual.der != null) {
-                actual = actual.der;
-            } else {
-                haySiguiente = false;
-            }
+        while (actual.der != null) {
+            actual = actual.der;
         }
 
         return actual.valor;
@@ -104,36 +94,41 @@ public class ABB<T extends Comparable<T>> {
     }
 
     public boolean pertenece(T elem){
-        Nodo actual = raiz;
-        while (actual != null) {
-            int valorComparacion = elem.compareTo(actual.valor);
-            if (valorComparacion == 0) return true;
-            if (valorComparacion > 0) {
-                actual = actual.der;
-            }
-            if (valorComparacion < 0) {
-                actual = actual.izq;
-            }
-        }
-        return false;
+        Nodo nodo = buscarNodo(elem);
+
+        return nodo != null && elem.compareTo(nodo.valor) == 0;
     }
 
     private void eliminarSinDescendencia(Nodo nodoAEliminar) {
         Nodo padre = nodoAEliminar.padre;
+        boolean esRaiz = padre == null;
 
-        if (padre.izq == nodoAEliminar) {
-            padre.izq = null;
-        }
-        if (padre.der == nodoAEliminar) {
-            padre.der = null;
+        if (esRaiz) {
+            raiz = null;
+        } else {
+            if (padre.izq == nodoAEliminar) {
+                padre.izq = null;
+            }
+            if (padre.der == nodoAEliminar) {
+                padre.der = null;
+            }
         }
         cardinal -= 1;
     }
 
     private void eliminarConUnHijo(Nodo nodoAEliminar) {
         Nodo padre = nodoAEliminar.padre;
-        boolean esHijoDerecho = nodoAEliminar.valor.compareTo(padre.valor) > 0;
         Nodo hijo = nodoAEliminar.der != null ? nodoAEliminar.der : nodoAEliminar.izq;
+        boolean esRaiz = padre == null;
+
+        if (esRaiz) {
+            hijo.padre = null;
+            raiz = hijo;
+            cardinal -= 1;
+            return;
+        }
+
+        boolean esHijoDerecho = nodoAEliminar.valor.compareTo(padre.valor) > 0;
         hijo.padre = padre;
         if (esHijoDerecho) {
             padre.der = hijo;
@@ -145,39 +140,39 @@ public class ABB<T extends Comparable<T>> {
 
     private void eliminarConDosHijos(Nodo nodoAEliminar) {
         Nodo padre = nodoAEliminar.padre;
-        boolean esHijoDerecho = nodoAEliminar.valor.compareTo(padre.valor) > 0;
         Nodo hijoIzq = nodoAEliminar.izq;
         Nodo hijoDer = nodoAEliminar.der;
         Nodo predecesorInmediato = buscarPredecesorInmediato(hijoIzq);
-        
-        if (esHijoDerecho) {
-            padre.der = predecesorInmediato;
-        } else {
-            padre.izq = predecesorInmediato;
-        }
-        predecesorInmediato.padre = padre;
+        boolean esHijoIzqElPredecesor = hijoIzq.valor.compareTo(predecesorInmediato.valor) == 0;
+        boolean esRaiz = padre == null;
 
-        hijoDer.padre = predecesorInmediato;
-        predecesorInmediato.der = hijoDer;
-        if (hijoIzq.valor.compareTo(predecesorInmediato.valor) != 0) {
+     
+        if (!esHijoIzqElPredecesor) {
+            if (predecesorInmediato.izq != null) {
+                predecesorInmediato.izq.padre = predecesorInmediato.padre;
+                predecesorInmediato.padre.der = predecesorInmediato.izq;
+            } else {
+                predecesorInmediato.padre.der = null;
+            }
             hijoIzq.padre = predecesorInmediato;
             predecesorInmediato.izq = hijoIzq;
-        } else {
-            predecesorInmediato.izq.padre = predecesorInmediato;
-        }
+        } 
+        
+        hijoDer.padre = predecesorInmediato;
+        predecesorInmediato.der = hijoDer;
 
-        if(predecesorInmediato.izq != null) {
-            predecesorInmediato.izq.padre = predecesorInmediato.padre;
-            predecesorInmediato.padre.der = predecesorInmediato.izq;
+        if (esRaiz) {
+            raiz = predecesorInmediato;
+            predecesorInmediato.padre = null;
         } else {
-            predecesorInmediato.padre.der = null;
-        }
-
-      
-        predecesorInmediato.izq = null;
-        if (hijoIzq != predecesorInmediato) {
-            hijoIzq.padre = predecesorInmediato;
-            predecesorInmediato.izq =hijoIzq;
+            boolean esHijoDerecho = nodoAEliminar.valor.compareTo(padre.valor) > 0;
+            
+            if (esHijoDerecho) {
+                padre.der = predecesorInmediato;
+            } else {
+                padre.izq = predecesorInmediato;
+            }
+            predecesorInmediato.padre = padre;
         }
 
         cardinal -= 1;
@@ -197,7 +192,7 @@ public class ABB<T extends Comparable<T>> {
         Nodo nodoAEliminar = buscarNodo(elem);
         
         // CASO 0
-        if (nodoAEliminar == null) return;
+        if (nodoAEliminar == null || nodoAEliminar.valor.compareTo(elem) != 0) return;
         
         // CASO 1
         if (nodoAEliminar.izq == null && nodoAEliminar.der == null) {
