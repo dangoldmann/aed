@@ -222,9 +222,11 @@ public class ABB<T extends Comparable<T>> {
 
     private Nodo primerAncestroDerecho(Nodo inicial) {
         Nodo actual = inicial;
+        int valorComparacion = 0;
 
-        while (inicial.valor.compareTo(actual.valor) <= 0) {
+        while (valorComparacion >= 0) {
             actual = actual.padre;
+            valorComparacion = inicial.valor.compareTo(actual.valor);
         }
 
         return actual;
@@ -232,22 +234,15 @@ public class ABB<T extends Comparable<T>> {
 
     public String toString(){
         String res = "{";
-        Nodo actual = buscarNodo(minimo());
-        int i = 0;
+        ABB_Iterador iterador = new ABB_Iterador();
 
-        while (i < cardinal) {
+        while (iterador.haySiguiente()) {
+            T valorActual = iterador.siguiente();
             if (res == "{") {
-                res += actual.valor;
+                res += valorActual;
             } else {
-                res += ("," + actual.valor);
+                res += ("," + valorActual);
             }
-
-            if (actual.der != null) {
-                actual = minimoASuDerecha(actual.der);
-            } else if (actual.padre != null) {
-                actual = primerAncestroDerecho(actual);
-            }
-            i++;
         }
 
         res += '}';
@@ -255,14 +250,27 @@ public class ABB<T extends Comparable<T>> {
     }
 
     public class ABB_Iterador {
-        private Nodo _actual;
+        private Nodo actual;
 
         public boolean haySiguiente() {            
-            throw new UnsupportedOperationException("No implementada aun");
+            return actual != null;
         }
     
         public T siguiente() {
-            throw new UnsupportedOperationException("No implementada aun");
+            T prev = actual.valor;
+
+            if (actual.der != null) {
+                actual = minimoASuDerecha(actual.der);
+            } else if (actual.valor.compareTo(maximo()) == 0) {
+                actual = null;
+            } else if (actual.padre != null) {
+                actual = primerAncestroDerecho(actual);
+            }
+            return prev;
+        }
+
+        ABB_Iterador() {
+            actual = raiz != null ? minimoASuDerecha(raiz) : null;
         }
     }
 
