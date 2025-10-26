@@ -192,6 +192,30 @@ public class ABB<T extends Comparable<T>> {
         return new HandleABB(ultimoNodoBuscado);
     }
 
+    public int cardinal() {
+        ABB_Iterador iterador = new ABB_Iterador();
+        int cuenta = 0;
+
+        while (iterador.haySiguiente()) {
+            cuenta++;
+            iterador.siguiente();
+        }
+
+        return cuenta;
+    }
+
+    private Nodo primerAncestroDerecho(Nodo inicial) {
+        Nodo actual = inicial;
+        int valorComparacion = 0;
+
+        while (valorComparacion >= 0) {
+            actual = actual.padre;
+            valorComparacion = inicial.valor.compareTo(actual.valor);
+        }
+
+        return actual;
+    }
+
     public boolean pertenece(T elem){
          Nodo nodo = buscarNodo(elem);
 
@@ -206,7 +230,7 @@ public class ABB<T extends Comparable<T>> {
         
         // CASO 1
         if (nodoAEliminar.izq == null && nodoAEliminar.der == null) {
-            eliminarSinDescendencia(nodoAEliminar);
+            eliminarSinHijos(nodoAEliminar);
             return;
         }
         
@@ -220,6 +244,16 @@ public class ABB<T extends Comparable<T>> {
         eliminarConDosHijos(nodoAEliminar);
     }
 
+    public T maximo(){
+        Nodo actual = raiz;
+
+        while (actual.der != null) {
+            actual = actual.der;
+        }
+
+        return actual.valor;
+    }
+
     @Override
     public String toString(){
         String res = "{";
@@ -230,12 +264,22 @@ public class ABB<T extends Comparable<T>> {
             if (res == "{") {
                 res += valorActual;
             } else {
-                res += ("," + valorActual);
+                res += (", " + valorActual);
             }
         }
 
         res += '}';
         return res;
+    }
+
+    private Nodo minimoASuDerecha(Nodo inicial) {
+        Nodo actual = inicial;
+
+        while (actual.izq != null) {
+            actual = actual.izq;
+        }
+
+        return actual;
     }
 
     public class ABB_Iterador {

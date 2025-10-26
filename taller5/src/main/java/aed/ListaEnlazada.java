@@ -25,7 +25,7 @@ public class ListaEnlazada<T> {
     }
 
     public void agregarAdelante(T elem) {
-        Nodo nuevoNodo = new nodo(elem);
+        Nodo nuevoNodo = new Nodo(elem);
         nuevoNodo.sig = primero;
         primero = nuevoNodo;
     }
@@ -55,8 +55,14 @@ public class ListaEnlazada<T> {
     }
 
     public void eliminar(int i) {
+        if (i == 0) {
+            primero = primero.sig;
+            return;
+        }
+
         Nodo prev = null;    
         Nodo actual = primero;
+
 
         while (i > 0) {
             prev = actual;
@@ -67,7 +73,7 @@ public class ListaEnlazada<T> {
         prev.sig = actual.sig;
     }
 
-    public void modificarPosicion(int indice, T elem) {
+    public void modificarPosicion(int i, T elem) {
         Nodo actual = primero;
 
         while (i > 0) {
