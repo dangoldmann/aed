@@ -10,4 +10,28 @@ public class Estudiante implements Comparable<Estudiante>{
         examen = _examen;
         puntaje = 0;
    }
+
+   public int id() {
+      return this.id;
+   }
+
+   public int[] examen() {
+      return this.examen;
+   }
+
+   public void responderPregunta(int nroPregunta, int respuesta) {
+      examen[nroPregunta] = respuesta;
+   }
+
+   public void actualizarPuntaje(double nuevoPuntaje) {
+      puntaje = nuevoPuntaje;
+   }
+
+   public double puntaje() {
+      return this.puntaje;
+   }
+
+   public int compareTo(Estudiante otro) {
+      return this.id - otro.id;
+   }
 }

@@ -1,5 +1,7 @@
 package aed;
 
+import java.util.ArrayList;
+
 public class Heap<T extends Comparable<T>> {
    private T[] elementos;
 
@@ -22,31 +24,28 @@ public class Heap<T extends Comparable<T>> {
     }
     
     public Heap(T[] valores) {
-        elementos = new T[valores.length];                                  // O(1)
-        for (int i = 0; i < elementos.length; i++) {                        // O(E)
-            elementos[i] = valores[i];                                      // O(1)
-        }
+        elementos = valores;
     }
 
-    public HandleHeap[] obtenerHandles() {
-        HandleHeap[] handles = new HandleHeap[elementos.length];
-        for (int i = 0; i < elementos.length; i++) {                        // O(E)
-            HandleHeap handle = new HandleHeap(elementos[i], i);            // O(1)
-            handles[i] = handle;                                            // O(1)
+    public ArrayList<Heap<Estudiante>.HandleHeap> obtenerHandles() {
+        ArrayList<Heap<Estudiante>.HandleHeap> handles = new ArrayList<Heap<Estudiante>.HandleHeap>(elementos.length);      // O(1)
+        for (int i = 0; i < elementos.length; i++) {                                                                        // O(E)
+            Heap<Estudiante>.HandleHeap handle = (Heap<Estudiante>.HandleHeap) new HandleHeap(elementos[i], i);             // O(1)
+            handles.add(i, handle);                                                                                         // O(1)
         }
 
-        return handles;
+        return handles;                                                                                                     // O(1)
     }
 
     public T desencolar() {
         return elementos[0];
     }
 
-    public HandleHeap encolar() {
-
+    public HandleHeap encolar(T valor) {
+        return new HandleHeap(valor, 0);
     }
 
     private HandleHeap modificar(T valor, int posicion) {
-
+        return new HandleHeap(valor, posicion);
     }
 }
