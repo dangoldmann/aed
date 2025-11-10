@@ -28,7 +28,7 @@ public class Edr {
         
         estudiantesSentados = new Heap<Estudiante>(tempEstudiantes);                                       // O(1)
         estudiantesQueEntregaron = new Heap<Estudiante>(new Estudiante[Cant_estudiantes]);                 // O(1)
-        handlesEstudiantes = estudiantesSentados.obtenerHandles();                                         // O(1)
+        handlesEstudiantes = estudiantesSentados.obtenerHandles();                                         // O(E)
     }
 
 //-------------------------------------------------NOTAS--------------------------------------------------------------------------
@@ -191,10 +191,9 @@ public class Edr {
         ArrayList<NotaFinal> notas = new ArrayList<>();
         for (int i = 0; i < handlesEstudiantes.size(); i++) {                       // O(E)
             Estudiante e = estudiantesQueEntregaron.desencolar();                   // O(log(E))
-            if (copiados[i]) {
-
-            }
-            
+            if (copiados[e.id()]) continue;                                         // O(1)
+            NotaFinal nota = new NotaFinal(e.puntaje(), e.id());                    // O(1)
+            notas.add(nota);                                                        // O(1)
         }
 
         NotaFinal[] res = new NotaFinal[notas.size()];                              // O(1)
