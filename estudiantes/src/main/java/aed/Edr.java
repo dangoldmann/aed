@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 public class Edr {
     private Heap<Estudiante> estudiantesSentados;
+    private Heap<Estudiante> estudiantesQueEntregaron;
     private boolean[] copiados;
-    private boolean[] entregaron;
     private ArrayList<Heap<Estudiante>.HandleHeap> handlesEstudiantes;
     private int dimensionAula;
     private int[] solucionExamen;
@@ -13,10 +13,9 @@ public class Edr {
     public Edr(int LadoAula, int Cant_estudiantes, int[] ExamenCanonico) {       
         handlesEstudiantes = new ArrayList<>(Cant_estudiantes);                                     // O(1)
         copiados = new boolean[Cant_estudiantes];                                                   // O(1)
-        entregaron = new boolean[Cant_estudiantes];                                                 // O(1)
         dimensionAula = LadoAula;                                                                   // O(1)
         solucionExamen = ExamenCanonico;                                                            // O(1)
-
+        
         Estudiante[] tempEstudiantes = new Estudiante[Cant_estudiantes];
         for (int i = 0; i < Cant_estudiantes; i++) {                                                // O(E)
             int[] examenInicial = new int[ExamenCanonico.length];                                   // O(1)
@@ -26,8 +25,9 @@ public class Edr {
             Estudiante e = new Estudiante(i, examenInicial); 
             tempEstudiantes[i] = e;                                                                 // O(1)
         }
-
-        estudiantesSentados = new Heap<Estudiante>(tempEstudiantes);                                                    // O(1)
+        
+        estudiantesSentados = new Heap<Estudiante>(tempEstudiantes);                                       // O(1)
+        estudiantesQueEntregaron = new Heap<Estudiante>(new Estudiante[Cant_estudiantes]);                 // O(1)
         handlesEstudiantes = estudiantesSentados.obtenerHandles();                                         // O(1)
     }
 
@@ -46,24 +46,24 @@ public class Edr {
 //------------------------------------------------COPIARSE------------------------------------------------------------------------
 
     private ArrayList<Integer> obtenerIdsVecinos(int idEstudiante) {
-        ArrayList<Integer> idsVecinos = new ArrayList<Integer>();
-        int[] posicionEstudiante = calcularPosicionPorId(idEstudiante);
-        boolean tieneVecinoDerecho = dimensionAula >= posicionEstudiante[1] + 1 && handlesEstudiantes.size() -  1 > idEstudiante;
-        boolean tieneVecinoIzquierdo = posicionEstudiante[1] != 0;
-        boolean tieneVecinoAdelante = posicionEstudiante[0] != 0;
+        ArrayList<Integer> idsVecinos = new ArrayList<Integer>();                                                                   // O(1)
+        int[] posicionEstudiante = calcularPosicionPorId(idEstudiante);                                                             // O(1)
+        boolean tieneVecinoDerecho = dimensionAula >= posicionEstudiante[1] + 1 && handlesEstudiantes.size() -  1 > idEstudiante;   // O(1)
+        boolean tieneVecinoIzquierdo = posicionEstudiante[1] != 0;                                                                  // O(1)
+        boolean tieneVecinoAdelante = posicionEstudiante[0] != 0;                                                                   // O(1)
 
         if (tieneVecinoDerecho) {
-            idsVecinos.add(idEstudiante + 1);
+            idsVecinos.add(idEstudiante + 1);                                                                                       // O(1)
         }
         if (tieneVecinoIzquierdo) {
-            idsVecinos.add(idEstudiante - 1);
+            idsVecinos.add(idEstudiante - 1);                                                                                       // O(1)
         }
         if (tieneVecinoAdelante) {
-            int estudiantesPorFila = dimensionAula % 2 == 0 ? dimensionAula / 2 : (dimensionAula / 2) + 1;
-            idsVecinos.add(idEstudiante - estudiantesPorFila);
+            int estudiantesPorFila = dimensionAula % 2 == 0 ? dimensionAula / 2 : (dimensionAula / 2) + 1;                          // O(1)
+            idsVecinos.add(idEstudiante - estudiantesPorFila);                                                                      // O(1)
         }
 
-        return idsVecinos;
+        return idsVecinos;                                                                                                          // O(1)
     }
 
     private int[] calcularPosicionPorId(int id) {
@@ -80,11 +80,12 @@ public class Edr {
     }
 
     private int obtenerVecinoConMasRespuestas(ArrayList<Integer> idsVecinos, int idEstudiante) {
-        int[] respuestasEstudiante = handlesEstudiantes.get(idEstudiante).valor().examen();
-        int idVecinoConMasRespuestas = idsVecinos.get(0);
-        int maxRespuestasQueNoTieneEstudiante = 0;
-        for (int i = 0; i < idsVecinos.size(); i++) {
-            int[] respuestasVecino = handlesEstudiantes.get(idsVecinos.get(i)).valor().examen();
+        int[] respuestasEstudiante = handlesEstudiantes.get(idEstudiante).valor().examen();          // O(1)
+        int idVecinoConMasRespuestas = idsVecinos.get(0);                                     // O(1)
+        int maxRespuestasQueNoTieneEstudiante = 0;                                                  // O(1)
+
+        for (int i = 0; i < idsVecinos.size(); i++) {                                               // O(1) Esta acotada la cantidad de vecinos que puede tener cualquier estudiante.
+            int[] respuestasVecino = handlesEstudiantes.get(idsVecinos.get(i)).valor().examen();    // O(1)
             int respuestasQueNoTiene = 0;                                               // O(1)
             
             for (int j = 0; j < solucionExamen.length; j++) {                           // O(R)
@@ -93,13 +94,13 @@ public class Edr {
                 }
             }
 
-            if (respuestasQueNoTiene > maxRespuestasQueNoTieneEstudiante) {
-                idVecinoConMasRespuestas = idsVecinos.get(i);
-                maxRespuestasQueNoTieneEstudiante = respuestasQueNoTiene;
+            if (respuestasQueNoTiene > maxRespuestasQueNoTieneEstudiante || (respuestasQueNoTiene == maxRespuestasQueNoTieneEstudiante && idsVecinos.get(i) < idVecinoConMasRespuestas)) {
+                idVecinoConMasRespuestas = idsVecinos.get(i);                               // O(1)
+                maxRespuestasQueNoTieneEstudiante = respuestasQueNoTiene;                   // O(1)
             }
         }
 
-        return idVecinoConMasRespuestas;
+        return idVecinoConMasRespuestas;                                                    // O(1)
     }
 
     private int[] obtenerRespuestaACopiarse(int idVecinoConMasRespuestas, int idEstudiante) {
@@ -118,26 +119,26 @@ public class Edr {
     }
 
     private double calcularPuntaje(int[] examen) {
-        int cantRespuestasCorrectas = 0;
-        for (int i = 0; i < solucionExamen.length; i++) {
-            if (examen[i] == solucionExamen[i]) {
-                cantRespuestasCorrectas++;
+        int cantRespuestasCorrectas = 0;                                            // O(1)
+        for (int i = 0; i < solucionExamen.length; i++) {                           // O(R)
+            if (examen[i] == solucionExamen[i]) {                                   // O(1)
+                cantRespuestasCorrectas++;                                          // O(1)
             }
         }
-        return (double) cantRespuestasCorrectas / solucionExamen.length * 100;
+        return (double) cantRespuestasCorrectas / solucionExamen.length * 100;      // O(1)
     }
 
     public void copiarse(int estudiante) {
         ArrayList<Integer> idsVecinos = obtenerIdsVecinos(estudiante);                                           // O(1)
-        int idVecinoConMasRespuestas = obtenerVecinoConMasRespuestas(idsVecinos, estudiante);       // O(R)
-        int[] respuestaACopiarse = obtenerRespuestaACopiarse(idVecinoConMasRespuestas, estudiante);   // O(R)
+        int idVecinoConMasRespuestas = obtenerVecinoConMasRespuestas(idsVecinos, estudiante);                    // O(R)
+        int[] respuestaACopiarse = obtenerRespuestaACopiarse(idVecinoConMasRespuestas, estudiante);              // O(R)
 
-        Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);
-        Estudiante e = handle.valor();
-        e.responderPregunta(respuestaACopiarse[0], respuestaACopiarse[1]);
-        e.actualizarPuntaje(calcularPuntaje(e.examen()));
-        Heap<Estudiante>.HandleHeap nuevoHandle = handle.modificarValor(e);
-        handlesEstudiantes.set(estudiante, nuevoHandle);
+        Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);                                 // O(1)
+        Estudiante e = handle.valor();                                                                           // O(1)
+        e.responderPregunta(respuestaACopiarse[0], respuestaACopiarse[1]);                                       // O(1)
+        e.actualizarPuntaje(calcularPuntaje(e.examen()));                                                        // O(R)
+        Heap<Estudiante>.HandleHeap nuevoHandle = handle.modificarValor(e);                                      // O(log (E))
+        handlesEstudiantes.set(estudiante, nuevoHandle);                                                         // O(1)
     }
 
 
@@ -147,12 +148,12 @@ public class Edr {
 
 
     public void resolver(int estudiante, int NroEjercicio, int res) {
-        Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);
-        Estudiante e = handle.valor();
-        e.responderPregunta(NroEjercicio, res);
-        e.actualizarPuntaje(calcularPuntaje(e.examen()));
-        Heap<Estudiante>.HandleHeap nuevoHandle = handle.modificarValor(e);
-        handlesEstudiantes.set(estudiante, nuevoHandle);
+        Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);                // O(1)
+        Estudiante e = handle.valor();                                                          // O(1)
+        e.responderPregunta(NroEjercicio, res);                                                 // O(1)
+        e.actualizarPuntaje(calcularPuntaje(e.examen()));                                       // O(1)
+        Heap<Estudiante>.HandleHeap nuevoHandle = handle.modificarValor(e);                     // O(log(E))
+        handlesEstudiantes.set(estudiante, nuevoHandle);                                        // O(1)
     }
 
 
@@ -160,20 +161,20 @@ public class Edr {
 //------------------------------------------------CONSULTAR DARK WEB-------------------------------------------------------
 
     public void consultarDarkWeb(int n, int[] examenDW) {
-        Estudiante[] tempEstudiantes =  new Estudiante[n];
-        for (int i = 0; i < n; i++) {                               // O(k)
-            Estudiante e = estudiantesSentados.desencolar();                // O(log(E))
-            for (int j = 0; j < examenDW.length; j++) {             // O(R)
-                e.responderPregunta(j, examenDW[j]);
+        Estudiante[] tempEstudiantes =  new Estudiante[n];                                  // O(1)
+        for (int i = 0; i < n; i++) {                                                       // O(k)
+            Estudiante e = estudiantesSentados.desencolar();                                // O(log(E))
+            for (int j = 0; j < examenDW.length; j++) {                                     // O(R)
+                e.responderPregunta(j, examenDW[j]);                                        // O(1)
             }
-            e.actualizarPuntaje(calcularPuntaje(e.examen()));
-            tempEstudiantes[i] = e;                                 // O(1)
+            e.actualizarPuntaje(calcularPuntaje(e.examen()));                               // O(1)
+            tempEstudiantes[i] = e;                                                         // O(1)
         }
 
-        for (int i = 0; i < n; i++) {                               // O(k)
-            Estudiante e = tempEstudiantes[i];                      // O(1)
-            Heap<Estudiante>.HandleHeap handle = estudiantesSentados.encolar(e);             // O(log(E))
-            handlesEstudiantes.set(e.id(), handle);                                          // O(1)
+        for (int i = 0; i < n; i++) {                                                       // O(k)
+            Estudiante e = tempEstudiantes[i];                                              // O(1)
+            Heap<Estudiante>.HandleHeap handle = estudiantesSentados.encolar(e);            // O(log(E))
+            handlesEstudiantes.set(e.id(), handle);                                         // O(1)
         }
     }
  
@@ -187,17 +188,75 @@ public class Edr {
 //-----------------------------------------------------CORREGIR---------------------------------------------------------
 
     public NotaFinal[] corregir() {
-        for (int i = 0; i < copiados.length; i++) {                                 // O(E)
-            // Estudiante e = estudiantesQueEntregaron.desencolar();                   // O(log(E))
+        ArrayList<NotaFinal> notas = new ArrayList<>();
+        for (int i = 0; i < handlesEstudiantes.size(); i++) {                       // O(E)
+            Estudiante e = estudiantesQueEntregaron.desencolar();                   // O(log(E))
+            if (copiados[i]) {
+
+            }
             
         }
-        return new NotaFinal[0];
+
+        NotaFinal[] res = new NotaFinal[notas.size()];                              // O(1)
+        for (int i = 0; i < notas.size(); i++) {                                    // O(E)
+            res[i] = notas.get(i);                                                  // O(1)
+        }
+
+        return res;                                                                 // O(1)
     }
 
 //-------------------------------------------------------CHEQUEAR COPIAS-------------------------------------------------
 
+    public int[][] armarTablaRespuestas() {
+        int[][] tablaRespuestas = new int[solucionExamen.length][10];       // O(1)
+
+        for (int i = 0; i < handlesEstudiantes.size(); i++) {               // O(E)
+            int[] examen = handlesEstudiantes.get(i).valor().examen();      // O(1)
+            for (int j = 0; j < examen.length; j++) {                       // O(R)
+                int respuesta = examen[j];                                  // O(1)
+                if (respuesta == -1) continue;                              // O(1)
+                tablaRespuestas[j][examen[j]] += 1;                         // O(1)
+            }
+        }
+
+        return tablaRespuestas;                                             // O(1)
+    }
+
+    public boolean esCopion(int[] examen, int[][] tablaRespuestas) {
+        boolean esCopion = true;                                                                                    // O(1)
+
+        for (int i = 0; i < examen.length; i++) {                                                                   // O(R)
+            int respuesta = examen[i];                                                                              // O(1)
+            if (respuesta == -1) continue;
+            boolean esRespuestaSospechosa = tablaRespuestas[i][examen[i]] - 1 >= handlesEstudiantes.size() * 0.25;  // O(1)
+            if (!esRespuestaSospechosa) {                                                                           // O(1)
+                esCopion = false;                                                                                   // O(1)
+                break;                                                                                              // O(1)
+            }
+        }
+
+        return esCopion;                                                                                            // O(1)
+    }
+
     public int[] chequearCopias() {
-        int[][] tablaRespuestas = new int[solucionExamen.length][10];
-        return new int[0];
+        int[][] tablaRespuestas = armarTablaRespuestas();                   // O(E * R)
+
+        ArrayList<Integer> copiones = new ArrayList<>();                    // O(1)
+
+        for (int i = 0; i < handlesEstudiantes.size(); i++) {               // O(E)
+            int[] examen = handlesEstudiantes.get(i).valor().examen();      // O(1)
+    
+            if (esCopion(examen, tablaRespuestas)) {                        // O(R)
+                copiones.add(i);                                            // O(1)
+                copiados[i] = true;                                         // O(1)
+            }         
+        }
+        
+        int[] res = new int[copiones.size()];                               // O(1)
+        for (int i = 0; i < copiones.size(); i++) {                         // O(E)
+            res[i] = copiones.get(i);                                       // O(1)
+        }
+
+        return res;
     }
 }
