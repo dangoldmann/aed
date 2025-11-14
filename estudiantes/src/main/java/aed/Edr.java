@@ -208,8 +208,69 @@ public class Edr {
             res[i] = notas.get(i);                                                  // O(1)
         }
         
-        // Falta ordenar por nota
-        return res;                                                                 // O(1)
+        return ordenarNotas(res);                                                                 // O(1)
+    }
+
+    private NotaFinal[] ordenarNotas(NotaFinal[] notas) {
+        if (notas.length == 1) {
+            return notas;
+        }
+        if (notas.length == 2) {
+            if (notas[0].compareTo(notas[1]) > 0) {
+                return notas;
+            }
+            return new NotaFinal[]{
+                notas[1],
+                notas[0]
+            };
+        }
+
+        NotaFinal[] n1 = new NotaFinal[(int) Math.ceil((double) (notas.length / 2))];
+        NotaFinal[] n2 = new NotaFinal[(int) Math.floor((double) (notas.length / 2))];
+
+        int ultimoIN1 = (notas.length - 1) / 2;
+
+        for (int i = 0; i < notas.length; i++) {
+            if (i <= ultimoIN1) {
+                n1[i] = notas[i];
+            } else {
+                n2[i - 1 - ultimoIN1] = notas[i];
+            }
+        }
+
+        return merge(ordenarNotas(n1), ordenarNotas(n2));
+    } 
+
+    private NotaFinal[] merge(NotaFinal[] n1, NotaFinal[] n2) {
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        NotaFinal[] res = new NotaFinal[n1.length + n2.length];
+
+        while (i < n1.length || j < n2.length) {
+            if (i == n1.length) {
+                res[k] = n2[j];
+                k++;
+                j++;
+            } else if (j == n2.length) {
+                res[k] = n1[i];
+                k++;
+                i++;
+            } else {
+                if (n1[i].compareTo(n2[j]) > 0) {
+                    res[k] = n1[i];
+                    k++;
+                    i++;
+                } else {
+                    res[k] = n2[j];
+                    k++;
+                    j++;
+                }
+            }
+        }
+        
+        return res;
     }
 
 //-------------------------------------------------------CHEQUEAR COPIAS-------------------------------------------------
