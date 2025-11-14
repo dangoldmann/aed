@@ -143,7 +143,7 @@ public class Edr {
         Estudiante e = handle.valor();                                                                           // O(1)
         e.responderPregunta(respuestaACopiarse[0], respuestaACopiarse[1]);                                       // O(1)
         e.actualizarPuntaje(calcularPuntaje(e.examen()));                                                        // O(R)
-        handle.modificarValor(e);                                                                                // O(log (E))
+        handle.modificarValor();                                                                                // O(log (E))
     }
 
 
@@ -157,7 +157,7 @@ public class Edr {
         Estudiante e = handle.valor();                                                          // O(1)
         e.responderPregunta(NroEjercicio, res);                                                 // O(1)
         e.actualizarPuntaje(calcularPuntaje(e.examen()));                                       // O(1)
-        handle.modificarValor(e);                                                               // O(log(E))
+        handle.modificarValor();                                                               // O(log(E))
     }
 
 
@@ -189,7 +189,7 @@ public class Edr {
         Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);                        // O(1)
         Estudiante e = handle.valor();                                                                  // O(1)
         e.entregar();                                                                                   // O(1)
-        handle.modificarValor(e);                                                                       // O(log(E))
+        handle.modificarValor();                                                                       // O(log(E))
     }
 
 //-----------------------------------------------------CORREGIR---------------------------------------------------------

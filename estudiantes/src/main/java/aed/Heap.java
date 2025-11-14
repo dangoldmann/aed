@@ -22,8 +22,8 @@ public class Heap<T extends Comparable<T>> {
             return this.posicion;
         }
 
-        public void modificarValor(T nuevoValor) {
-            modificar(nuevoValor, posicion);
+        public void modificarValor() {
+            modificar(posicion);
         }
     }
     
@@ -101,7 +101,7 @@ public class Heap<T extends Comparable<T>> {
         return handle;
     }
 
-    private void modificar(T valor, int posicion) {
+    private void modificar(int posicion) {
         HandleHeap handleAModificar = elementos.get(posicion);
 
         siftUp(handleAModificar);
