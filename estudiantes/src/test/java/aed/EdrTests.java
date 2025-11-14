@@ -23,17 +23,6 @@ class EdrTests {
     }
 
     @Test
-    void probar_vecino_derecho() {
-        d_aula = 3;
-        cant_alumnos = 4;
-        solucion = new int[]{0,1,2,3,4,5,6,7,8,9};
-
-        edr = new Edr(d_aula, cant_alumnos, solucion);
-
-        edr.copiarse(1);
-    }
-
-    @Test
     void nuevo_edr() {
         double[] notas = edr.notas();
         double[] notas_esperadas = new double[]{0.0, 0.0, 0.0, 0.0};
@@ -232,7 +221,7 @@ class EdrTests {
             new NotaFinal(10.0, 0)
         };
 
-        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales)); // Falta ordenar
+        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
 
     }
 
@@ -313,12 +302,13 @@ class EdrTests {
             new NotaFinal(0.0, 6)
         };
 
-        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales)); // Falta ordenar el arreglo de salida por nota
+        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
 
     }
 
     @Test
     void alumnos_se_copian_una_vez(){
+        edr = new Edr(7, cant_alumnos, solucion);
         double[] notas;
         double[] notas_esperadas;
 
@@ -348,7 +338,7 @@ class EdrTests {
         }
 
         int[] copiones = edr.chequearCopias();
-        int[] copiones_esperados = new int[]{2,3}; // ¿Por que copion el 2? Si ningun otro estudiante tiene la respuesta 2 en la pregunta 2. Y el 0 si debería ser copion ya que el 3 se copio de el y tiene la respuesta 0 en la pregunta 0.
+        int[] copiones_esperados = new int[]{2,3};
         assertTrue(Arrays.equals(copiones_esperados, copiones));
 
         NotaFinal[] notas_finales = edr.corregir();
@@ -363,6 +353,7 @@ class EdrTests {
 
     @Test
     void alumnos_se_copian_mas_de_una_vez(){
+        edr = new Edr(7, cant_alumnos, solucion);
         double[] notas;
         double[] notas_esperadas;
 
@@ -418,8 +409,8 @@ class EdrTests {
         edr.copiarse(3);
         
         notas = edr.notas();
-        notas_esperadas = new double[]{10.0, 30.0, 40.0, 30.0}; // ¿Por que tendría que subir de nota aca? Si se copia del estudiante 0 la respuesta 0 en la pregunta 4 que es incorrecta. A menos que se pueda copiar del estudiante de adelante a la derecha.
-        // assertTrue(Arrays.equals(notas_esperadas, notas));
+        notas_esperadas = new double[]{10.0, 30.0, 40.0, 30.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
 
 
         for(int alumno = 0; alumno < 4; alumno++){
@@ -427,8 +418,8 @@ class EdrTests {
         }
 
         int[] copiones = edr.chequearCopias();
-        int[] copiones_esperados = new int[]{2,3}; // Mismo problema que antes. Si el 3 se copia del 0 entonces el 0 deberia aparecer aca. A menos que el 3 se copie del 1 que sería el de adelante a la derecha.
-        assertTrue(Arrays.equals(copiones_esperados, copiones)); 
+        int[] copiones_esperados = new int[]{2,3};
+        assertTrue(Arrays.equals(copiones_esperados, copiones));
 
         NotaFinal[] notas_finales = edr.corregir();
         NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
@@ -436,7 +427,7 @@ class EdrTests {
             new NotaFinal(10.0, 0)
         };
 
-        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales)); // Falta ordenar el arreglo de salida.
+        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
 
     @Test 
@@ -474,7 +465,7 @@ class EdrTests {
             new NotaFinal(10.0, 1),
         };
 
-        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales)); // Falta ordenar por nota.
+        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
 
     @Test 
@@ -587,7 +578,7 @@ class EdrTests {
             
         };
 
-        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales)); // Falta ordenar.
+        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
 
     @Test 
@@ -633,6 +624,6 @@ class EdrTests {
             new NotaFinal(10.0, 1),
         };
 
-        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales)); // Falta ordenar
+        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
 }

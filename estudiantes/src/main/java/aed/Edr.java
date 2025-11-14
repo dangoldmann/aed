@@ -212,7 +212,7 @@ public class Edr {
     }
 
     private NotaFinal[] ordenarNotas(NotaFinal[] notas) {
-        if (notas.length == 1) {
+        if (notas.length <= 1) {
             return notas;
         }
         if (notas.length == 2) {
@@ -225,8 +225,8 @@ public class Edr {
             };
         }
 
-        NotaFinal[] n1 = new NotaFinal[(int) Math.ceil((double) (notas.length / 2))];
-        NotaFinal[] n2 = new NotaFinal[(int) Math.floor((double) (notas.length / 2))];
+        NotaFinal[] n1 = new NotaFinal[(int) Math.ceil((double) notas.length / 2)];
+        NotaFinal[] n2 = new NotaFinal[(int) Math.floor((double) notas.length / 2)];
 
         int ultimoIN1 = (notas.length - 1) / 2;
 

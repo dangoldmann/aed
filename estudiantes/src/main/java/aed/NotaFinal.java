@@ -10,7 +10,7 @@ public class NotaFinal implements Comparable<NotaFinal> {
     }
 
     public int compareTo(NotaFinal otra){
-        if (otra._id != this._id){
+        if (this._nota == otra._nota){
             return this._id - otra._id;
         }
         return Double.compare(this._nota, otra._nota);
