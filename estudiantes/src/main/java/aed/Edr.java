@@ -46,7 +46,7 @@ public class Edr {
     private ArrayList<Integer> obtenerIdsVecinos(int idEstudiante) {
         ArrayList<Integer> idsVecinos = new ArrayList<Integer>();                                                                   // O(1)
         int[] posicionEstudiante = calcularPosicionPorId(idEstudiante);                                                             // O(1)
-        boolean tieneVecinoDerecho = dimensionAula >= posicionEstudiante[1] + 1 && handlesEstudiantes.size() -  1 > idEstudiante;   // O(1)
+        boolean tieneVecinoDerecho = dimensionAula >= posicionEstudiante[1] + 3 && handlesEstudiantes.size() -  1 > idEstudiante;   // O(1)
         boolean tieneVecinoIzquierdo = posicionEstudiante[1] != 0;                                                                  // O(1)
         boolean tieneVecinoAdelante = posicionEstudiante[0] != 0;                                                                   // O(1)
 

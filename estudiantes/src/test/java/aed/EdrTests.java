@@ -23,6 +23,17 @@ class EdrTests {
     }
 
     @Test
+    void probar_vecino_derecho() {
+        d_aula = 3;
+        cant_alumnos = 4;
+        solucion = new int[]{0,1,2,3,4,5,6,7,8,9};
+
+        edr = new Edr(d_aula, cant_alumnos, solucion);
+
+        edr.copiarse(1);
+    }
+
+    @Test
     void nuevo_edr() {
         double[] notas = edr.notas();
         double[] notas_esperadas = new double[]{0.0, 0.0, 0.0, 0.0};
