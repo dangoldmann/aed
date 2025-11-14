@@ -38,8 +38,8 @@ public class Estudiante implements Comparable<Estudiante>{
    }
 
    public int compareTo(Estudiante otro) {
-      if (this.entrego != otro.entrego) return this.entrego ? 1 : -1;
-      if (this.puntaje != otro.puntaje) return (int) (this.puntaje - otro.puntaje);
-      return this.id - otro.id;
+      if (this.entrego != otro.entrego) return this.entrego ? -1 : 1;
+      if (this.puntaje != otro.puntaje) return (int) (otro.puntaje - this.puntaje);
+      return otro.id - this.id;
    }
 }
