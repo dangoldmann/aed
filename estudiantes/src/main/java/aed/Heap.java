@@ -46,96 +46,96 @@ public class Heap<T extends Comparable<T>> {
     }
 
     private void intercambiarPosiciones(HandleHeap h1, HandleHeap h2) {
-        int tempPosicion = h1.posicion;
-        h1.posicion = h2.posicion;
-        h2.posicion = tempPosicion;
-        elementos.set(h1.posicion, h1);
-        elementos.set(h2.posicion, h2);
+        int tempPosicion = h1.posicion;                 // O(1)
+        h1.posicion = h2.posicion;                      // O(1)
+        h2.posicion = tempPosicion;                     // O(1)
+        elementos.set(h1.posicion, h1);                 // O(1)
+        elementos.set(h2.posicion, h2);                 // O(1)
     }
 
     private HandleHeap obtenerHijoIzquierdo(int posicion) {
-        int posicionHijoIzq = (2 * posicion) + 1;
-        HandleHeap hijoIzq = posicionHijoIzq < elementos.size() ? elementos.get(posicionHijoIzq) : null;
+        int posicionHijoIzq = (2 * posicion) + 1;                                                           // O(1)
+        HandleHeap hijoIzq = posicionHijoIzq < elementos.size() ? elementos.get(posicionHijoIzq) : null;    // O(1)
         
-        return hijoIzq;
+        return hijoIzq;                                                                                     // O(1)
     }
 
     private HandleHeap obtenerHijoDerecho(int posicion) {
-        int posicionHijoDer = (2 * posicion) + 2;
-        HandleHeap hijoDer = posicionHijoDer < elementos.size() ? elementos.get(posicionHijoDer) : null;
+        int posicionHijoDer = (2 * posicion) + 2;                                                           // O(1)
+        HandleHeap hijoDer = posicionHijoDer < elementos.size() ? elementos.get(posicionHijoDer) : null;    // O(1)
 
-        return hijoDer;
+        return hijoDer;                                                                                     // O(1)
     }
 
     private HandleHeap obtenerPadre(int posicion) {
-        int posicionPadre = (int) Math.floor((posicion - 1) / 2);
-        HandleHeap padre = posicionPadre >= 0 ? elementos.get(posicionPadre) : null;
+        int posicionPadre = (int) Math.floor((posicion - 1) / 2);                                           // O(1)
+        HandleHeap padre = posicionPadre >= 0 ? elementos.get(posicionPadre) : null;                        // O(1)
 
-        return padre;
+        return padre;                                                                                       // O(1)
     }
 
     public T desencolar() {
-        HandleHeap handleADesencolar = elementos.get(0);
-        HandleHeap ultimoEnCola = elementos.get(elementos.size() - 1);
+        HandleHeap handleADesencolar = elementos.get(0);                             // O(1)
+        HandleHeap ultimoEnCola = elementos.get(elementos.size() - 1);                      // O(1)
 
-        elementos.remove(ultimoEnCola.posicion);
+        elementos.remove(ultimoEnCola.posicion);                                            // O(1)
 
-        if (ultimoEnCola.posicion == 0) {
-            return handleADesencolar.valor;
+        if (ultimoEnCola.posicion == 0) {                                                   // O(1)
+            return handleADesencolar.valor;                                                 // O(1)
         }
 
-        ultimoEnCola.posicion = 0;
-        elementos.set(0, ultimoEnCola);
+        ultimoEnCola.posicion = 0;                                                          // O(1)
+        elementos.set(0, ultimoEnCola);                                               // O(1)
 
-        siftDown(ultimoEnCola);
+        siftDown(ultimoEnCola);                                                             // O(log(E))
 
-        return handleADesencolar.valor;
+        return handleADesencolar.valor;                                                     // O(1)
     }
 
     public HandleHeap encolar(T valor) {
-        HandleHeap handle = new HandleHeap(valor, elementos.size());
-        elementos.add(handle);
+        HandleHeap handle = new HandleHeap(valor, elementos.size());                        // O(1)
+        elementos.add(handle);                                                              // O(1)
 
-        siftUp(handle);
+        siftUp(handle);                                                                     // O(log(E))
 
-        return handle;
+        return handle;                                                                      // O(1)
     }
 
-    private void modificar(int posicion) {
-        HandleHeap handleAModificar = elementos.get(posicion);
+    private void modificar(int posicion) {  
+        HandleHeap handleAModificar = elementos.get(posicion);                              // O(1)
 
-        siftUp(handleAModificar);
+        siftUp(handleAModificar);                                                           // O(log(E))
 
-        siftDown(handleAModificar);
+        siftDown(handleAModificar);                                                         // O(log(E))
     }
 
     private void siftUp(HandleHeap handle) {
-        HandleHeap padre = obtenerPadre(handle.posicion);
-        boolean padreTieneMenosPrioridad = padre != null && handle.valor.compareTo(padre.valor) > 0;
+        HandleHeap padre = obtenerPadre(handle.posicion);                                               // O(1)
+        boolean padreTieneMenosPrioridad = padre != null && handle.valor.compareTo(padre.valor) > 0;    // O(1)
 
-        while (padreTieneMenosPrioridad) {
-            intercambiarPosiciones(handle, padre);
+        while (padreTieneMenosPrioridad) {                                                              // O(log(E)). Hay como mucho log E swaps.
+            intercambiarPosiciones(handle, padre);                                                      // O(1)
             
-            padre = obtenerPadre(handle.posicion);
+            padre = obtenerPadre(handle.posicion);                                                      // O(1)
 
-            padreTieneMenosPrioridad = padre != null && handle.valor.compareTo(padre.valor) > 0;
+            padreTieneMenosPrioridad = padre != null && handle.valor.compareTo(padre.valor) > 0;        // O(1)
         }
     }
 
     private void siftDown(HandleHeap handle) {
-        HandleHeap hijoIzq = obtenerHijoIzquierdo(handle.posicion);
-        HandleHeap hijoDer = obtenerHijoDerecho(handle.posicion);
+        HandleHeap hijoIzq = obtenerHijoIzquierdo(handle.posicion);             // O(1)
+        HandleHeap hijoDer = obtenerHijoDerecho(handle.posicion);               // O(1)
         
-        boolean existeHijoConMasPrioridad = (hijoIzq != null && hijoIzq.valor.compareTo(handle.valor) > 0) || (hijoDer != null && hijoDer.valor.compareTo(handle.valor) > 0);
+        boolean existeHijoConMasPrioridad = (hijoIzq != null && hijoIzq.valor.compareTo(handle.valor) > 0) || (hijoDer != null && hijoDer.valor.compareTo(handle.valor) > 0);       // O(1)
 
-        while (existeHijoConMasPrioridad) {
-            HandleHeap hijoPrioritario = hijoDer == null ? hijoIzq : hijoIzq.valor.compareTo(hijoDer.valor) > 0 ? hijoIzq : hijoDer;
-            intercambiarPosiciones(handle, hijoPrioritario);
+        while (existeHijoConMasPrioridad) {                                     // O(log(E)). Hay como mucho log E swaps.
+            HandleHeap hijoPrioritario = hijoDer == null ? hijoIzq : hijoIzq.valor.compareTo(hijoDer.valor) > 0 ? hijoIzq : hijoDer;            // O(1)
+            intercambiarPosiciones(handle, hijoPrioritario);                                                                                    // O(1)
             
-            hijoIzq = obtenerHijoIzquierdo(handle.posicion);
-            hijoDer = obtenerHijoDerecho(handle.posicion);
+            hijoIzq = obtenerHijoIzquierdo(handle.posicion);                                                                                    // O(1)
+            hijoDer = obtenerHijoDerecho(handle.posicion);                                                                                      // O(1)
 
-            existeHijoConMasPrioridad = (hijoIzq != null && hijoIzq.valor.compareTo(handle.valor) > 0) || (hijoDer != null && hijoDer.valor.compareTo(handle.valor) > 0);
+            existeHijoConMasPrioridad = (hijoIzq != null && hijoIzq.valor.compareTo(handle.valor) > 0) || (hijoDer != null && hijoDer.valor.compareTo(handle.valor) > 0);       // O(1)
         }
     }
 }

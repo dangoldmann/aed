@@ -25,8 +25,8 @@ public class Edr {
             tempEstudiantes[i] = e;                                                                 // O(1)
         }
         
-        estudiantes = new Heap<Estudiante>(tempEstudiantes);                                       // O(E)
-        handlesEstudiantes = estudiantes.obtenerHandles();                                         // O(E)
+        estudiantes = new Heap<Estudiante>(tempEstudiantes);                                        // O(E)
+        handlesEstudiantes = estudiantes.obtenerHandles();                                          // O(E)
     }
 
 //-------------------------------------------------NOTAS--------------------------------------------------------------------------
@@ -58,13 +58,7 @@ public class Edr {
         }
         if (tieneVecinoAdelante) {
             int estudiantesPorFila = dimensionAula % 2 == 0 ? dimensionAula / 2 : (dimensionAula / 2) + 1;                          // O(1)
-            idsVecinos.add(idEstudiante - estudiantesPorFila);   
-            if (tieneVecinoIzquierdo) {
-                // idsVecinos.add(idEstudiante - estudiantesPorFila - 1); // No estoy seguro si es así.
-            }
-            if (dimensionAula >= posicionEstudiante[1] + 1) {
-                // idsVecinos.add(idEstudiante - estudiantesPorFila + 1);
-            }                                                                   
+            idsVecinos.add(idEstudiante - estudiantesPorFila);                                                                      // O(1)                                                  
         }
 
         return idsVecinos;                                                                                                          // O(1)
@@ -76,9 +70,8 @@ public class Edr {
         if (estudiantesPorFila == 1) {                                                                    // O(1)
             return new int[]{id, 0};                                                                      // O(1)
         }
-        
 
-        int filaEstudiante = (int) Math.ceil((double) id / (estudiantesPorFila - 1)) - 1;                          // O(1) 
+        int filaEstudiante = (int) Math.ceil((double) id / (estudiantesPorFila - 1)) - 1;                 // O(1) 
         int columnaEstudiante = (id - (filaEstudiante * estudiantesPorFila)) * 2;                         // O(1)
 
         return new int[]{filaEstudiante, columnaEstudiante};                                              // O(1)
@@ -109,19 +102,19 @@ public class Edr {
     }
 
     private int[] obtenerRespuestaACopiarse(int idVecinoConMasRespuestas, int idEstudiante) {
-        int[] respuestasEstudiante = handlesEstudiantes.get(idEstudiante).valor().examen();
-        int[] respuestasVecino = handlesEstudiantes.get(idVecinoConMasRespuestas).valor().examen();
-        int[] res = new int[2];
+        int[] respuestasEstudiante = handlesEstudiantes.get(idEstudiante).valor().examen();                 // O(1)
+        int[] respuestasVecino = handlesEstudiantes.get(idVecinoConMasRespuestas).valor().examen();         // O(1)
+        int[] res = new int[2];                                                                             // O(1)
         
-        for (int i = 0; i < solucionExamen.length; i++) {
-            if (respuestasEstudiante[i] == -1 && respuestasVecino[i] != -1) {
-                res[0] = i;
-                res[1] = respuestasVecino[i];
-                break;
+        for (int i = 0; i < solucionExamen.length; i++) {                                                   // O(R)
+            if (respuestasEstudiante[i] == -1 && respuestasVecino[i] != -1) {                               // O(1)
+                res[0] = i;                                                                                 // O(1)
+                res[1] = respuestasVecino[i];                                                               // O(1)
+                break;                                                                                      // O(1)
             }
         }
         
-        return res;
+        return res;                                                                                         // O(1)
     }
 
     private double calcularPuntaje(int[] examen) {
@@ -143,7 +136,7 @@ public class Edr {
         Estudiante e = handle.valor();                                                                           // O(1)
         e.responderPregunta(respuestaACopiarse[0], respuestaACopiarse[1]);                                       // O(1)
         e.actualizarPuntaje(calcularPuntaje(e.examen()));                                                        // O(R)
-        handle.modificarValor();                                                                                // O(log (E))
+        handle.modificarValor();                                                                                 // O(log (E))
     }
 
 
@@ -157,7 +150,7 @@ public class Edr {
         Estudiante e = handle.valor();                                                          // O(1)
         e.responderPregunta(NroEjercicio, res);                                                 // O(1)
         e.actualizarPuntaje(calcularPuntaje(e.examen()));                                       // O(1)
-        handle.modificarValor();                                                               // O(log(E))
+        handle.modificarValor();                                                                // O(log(E))
     }
 
 
@@ -171,7 +164,7 @@ public class Edr {
             for (int j = 0; j < examenDW.length; j++) {                                     // O(R)
                 e.responderPregunta(j, examenDW[j]);                                        // O(1)
             }
-            e.actualizarPuntaje(calcularPuntaje(e.examen()));                               // O(1)
+            e.actualizarPuntaje(calcularPuntaje(e.examen()));                               // O(R)
             tempEstudiantes[i] = e;                                                         // O(1)
         }
 
@@ -189,13 +182,13 @@ public class Edr {
         Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);                        // O(1)
         Estudiante e = handle.valor();                                                                  // O(1)
         e.entregar();                                                                                   // O(1)
-        handle.modificarValor();                                                                       // O(log(E))
+        handle.modificarValor();                                                                        // O(log(E))
     }
 
 //-----------------------------------------------------CORREGIR---------------------------------------------------------
 
     public NotaFinal[] corregir() {
-        ArrayList<NotaFinal> notas = new ArrayList<>();
+        ArrayList<NotaFinal> notas = new ArrayList<>();                             // O(1)
         for (int i = 0; i < handlesEstudiantes.size(); i++) {                       // O(E)
             Estudiante e = handlesEstudiantes.get(i).valor();                       // O(1)
             if (copiados[i]) continue;                                              // O(1)
@@ -208,69 +201,69 @@ public class Edr {
             res[i] = notas.get(i);                                                  // O(1)
         }
         
-        return ordenarNotas(res);                                                                 // O(1)
+        return ordenarNotas(res);                                                   // O(E * log(E)). Complejidad del merge sort.
     }
 
     private NotaFinal[] ordenarNotas(NotaFinal[] notas) {
-        if (notas.length <= 1) {
-            return notas;
+        if (notas.length <= 1) {                        // O(1)
+            return notas;                               // O(1)
         }
-        if (notas.length == 2) {
-            if (notas[0].compareTo(notas[1]) > 0) {
-                return notas;
+        if (notas.length == 2) {                        // O(1)
+            if (notas[0].compareTo(notas[1]) > 0) {     // O(1)
+                return notas;                           // O(1)
             }
-            return new NotaFinal[]{
+            return new NotaFinal[]{                     // O(1)
                 notas[1],
                 notas[0]
             };
         }
 
-        NotaFinal[] n1 = new NotaFinal[(int) Math.ceil((double) notas.length / 2)];
-        NotaFinal[] n2 = new NotaFinal[(int) Math.floor((double) notas.length / 2)];
+        NotaFinal[] n1 = new NotaFinal[(int) Math.ceil((double) notas.length / 2)];         // O(1)
+        NotaFinal[] n2 = new NotaFinal[(int) Math.floor((double) notas.length / 2)];        // O(1)
 
-        int ultimoIN1 = (notas.length - 1) / 2;
+        int ultimoIN1 = (notas.length - 1) / 2;                                             // O(1)
 
-        for (int i = 0; i < notas.length; i++) {
-            if (i <= ultimoIN1) {
-                n1[i] = notas[i];
+        for (int i = 0; i < notas.length; i++) {                                            // O(E)
+            if (i <= ultimoIN1) {                                                           // O(1)
+                n1[i] = notas[i];                                                           // O(1)
             } else {
-                n2[i - 1 - ultimoIN1] = notas[i];
+                n2[i - 1 - ultimoIN1] = notas[i];                                           // O(1)
             }
         }
 
-        return merge(ordenarNotas(n1), ordenarNotas(n2));
+        return merge(ordenarNotas(n1), ordenarNotas(n2));                                   // O(E * log(E)). Complejidad del merge sort.
     } 
 
     private NotaFinal[] merge(NotaFinal[] n1, NotaFinal[] n2) {
-        int i = 0;
-        int j = 0;
-        int k = 0;
+        int i = 0;                          // O(1)
+        int j = 0;                          // O(1)
+        int k = 0;                          // O(1)
 
-        NotaFinal[] res = new NotaFinal[n1.length + n2.length];
+        NotaFinal[] res = new NotaFinal[n1.length + n2.length];         // O(1)
 
-        while (i < n1.length || j < n2.length) {
-            if (i == n1.length) {
-                res[k] = n2[j];
-                k++;
-                j++;
-            } else if (j == n2.length) {
-                res[k] = n1[i];
-                k++;
-                i++;
+        while (i < n1.length || j < n2.length) {                        // O(E). En el ultimo merge los dos subarreglos juntan a todos los elementos originales.
+            if (i == n1.length) {                                       // O(1)
+                res[k] = n2[j];                                         // O(1)
+                k++;                                                    // O(1)
+                j++;                                                    // O(1)
+            } else if (j == n2.length) {                                // O(1)
+                res[k] = n1[i];                                         // O(1)
+                k++;                                                    // O(1)
+                i++;                                                    // O(1)
             } else {
-                if (n1[i].compareTo(n2[j]) > 0) {
-                    res[k] = n1[i];
-                    k++;
-                    i++;
+                if (n1[i].compareTo(n2[j]) > 0) {                       // O(1)
+                    res[k] = n1[i];                                     // O(1)
+                    k++;                                                // O(1)
+                    i++;                                                // O(1)
                 } else {
-                    res[k] = n2[j];
-                    k++;
-                    j++;
+                    res[k] = n2[j];                                     // O(1)
+                    k++;                                                // O(1)
+                    j++;                                                // O(1)
                 }
             }
         }
         
-        return res;
+        return res;                                                     // O(1)
     }
 
 //-------------------------------------------------------CHEQUEAR COPIAS-------------------------------------------------
@@ -296,14 +289,14 @@ public class Edr {
 
         for (int i = 0; i < examen.length; i++) {                                                                   // O(R)
             int respuesta = examen[i];                                                                              // O(1)
-            if (respuesta == -1) {
-                cantidadSinResponder++;
-                continue;
+            if (respuesta == -1) {                                                                                  // O(1)
+                cantidadSinResponder++;                                                                             // O(1)
+                continue;                                                                                           // O(1)
             }
             boolean esRespuestaSospechosa = tablaRespuestas[i][examen[i]] - 1 >= (handlesEstudiantes.size() - 1) * 0.25;  // O(1)
-            if (!esRespuestaSospechosa) {                                                                           // O(1)
-                esCopion = false;                                                                                   // O(1)
-                break;                                                                                              // O(1)
+            if (!esRespuestaSospechosa) {                                                                                 // O(1)
+                esCopion = false;                                                                                         // O(1)
+                break;                                                                                                    // O(1)
             }
         }
 
