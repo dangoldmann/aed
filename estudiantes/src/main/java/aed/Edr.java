@@ -2,8 +2,7 @@ package aed;
 import java.util.ArrayList;
 
 public class Edr {
-    private Heap<Estudiante> estudiantesSentados;
-    private Heap<Estudiante> estudiantesQueEntregaron;
+    private Heap<Estudiante> estudiantes;
     private boolean[] copiados;
     private ArrayList<Heap<Estudiante>.HandleHeap> handlesEstudiantes;
     private int dimensionAula;
@@ -26,9 +25,8 @@ public class Edr {
             tempEstudiantes[i] = e;                                                                 // O(1)
         }
         
-        estudiantesSentados = new Heap<Estudiante>(tempEstudiantes);                                       // O(1)
-        estudiantesQueEntregaron = new Heap<Estudiante>(new Estudiante[Cant_estudiantes]);                 // O(1)
-        handlesEstudiantes = estudiantesSentados.obtenerHandles();                                         // O(E)
+        estudiantes = new Heap<Estudiante>(tempEstudiantes);                                       // O(1)
+        handlesEstudiantes = estudiantes.obtenerHandles();                                         // O(E)
     }
 
 //-------------------------------------------------NOTAS--------------------------------------------------------------------------
@@ -163,7 +161,7 @@ public class Edr {
     public void consultarDarkWeb(int n, int[] examenDW) {
         Estudiante[] tempEstudiantes =  new Estudiante[n];                                  // O(1)
         for (int i = 0; i < n; i++) {                                                       // O(k)
-            Estudiante e = estudiantesSentados.desencolar();                                // O(log(E))
+            Estudiante e = estudiantes.desencolar();                                // O(log(E))
             for (int j = 0; j < examenDW.length; j++) {                                     // O(R)
                 e.responderPregunta(j, examenDW[j]);                                        // O(1)
             }
@@ -173,7 +171,7 @@ public class Edr {
 
         for (int i = 0; i < n; i++) {                                                       // O(k)
             Estudiante e = tempEstudiantes[i];                                              // O(1)
-            Heap<Estudiante>.HandleHeap handle = estudiantesSentados.encolar(e);            // O(log(E))
+            Heap<Estudiante>.HandleHeap handle = estudiantes.encolar(e);            // O(log(E))
             handlesEstudiantes.set(e.id(), handle);                                         // O(1)
         }
     }
@@ -182,7 +180,8 @@ public class Edr {
 //-------------------------------------------------ENTREGAR-------------------------------------------------------------
 
     public void entregar(int estudiante) {
-        throw new UnsupportedOperationException("Sin implementar");
+        Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);                        // O(1)
+        handle.valor().entregar();
     }
 
 //-----------------------------------------------------CORREGIR---------------------------------------------------------
@@ -190,7 +189,7 @@ public class Edr {
     public NotaFinal[] corregir() {
         ArrayList<NotaFinal> notas = new ArrayList<>();
         for (int i = 0; i < handlesEstudiantes.size(); i++) {                       // O(E)
-            Estudiante e = estudiantesQueEntregaron.desencolar();                   // O(log(E))
+            Estudiante e = estudiantes.desencolar();                   // O(log(E))
             if (copiados[e.id()]) continue;                                         // O(1)
             NotaFinal nota = new NotaFinal(e.puntaje(), e.id());                    // O(1)
             notas.add(nota);                                                        // O(1)

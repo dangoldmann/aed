@@ -18,6 +18,10 @@ public class Heap<T extends Comparable<T>> {
             return this.valor;
         }
 
+        public int posicion() {
+            return this.posicion;
+        }
+
         public HandleHeap modificarValor(T valor) {
             return modificar(valor, posicion);
         }
@@ -47,5 +51,9 @@ public class Heap<T extends Comparable<T>> {
 
     private HandleHeap modificar(T valor, int posicion) {
         return new HandleHeap(valor, posicion);
+    }
+
+    public void eliminar(int posicion) {
+
     }
 }
