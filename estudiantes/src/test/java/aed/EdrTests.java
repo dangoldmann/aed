@@ -54,6 +54,26 @@ class EdrTests {
         notas_esperadas = new double[]{10.0, 0.0, 10.0, 0.0};
         assertTrue(Arrays.equals(notas_esperadas, notas));
     }
+    
+    //agregamos este test
+   @Test
+    void resolver_pisa_respuestas_previas() {
+        int[] solucion = new int[]{3, 1, 4, 2};   // 4 preguntas, 25 puntos c/u
+        Edr edr = new Edr(4, 4, solucion);
+
+        // primero contesta mal
+        edr.resolver(0, 2, 9);  // nota = 0
+        double[] notas = edr.notas();
+        double[] esperado1 = new double[]{0.0, 0.0, 0.0, 0.0};
+        assertTrue(Arrays.equals(notas, esperado1));
+
+        // Ahora corrige la pregunta 2 con la respuesta correcta 
+        edr.resolver(0, 2, 4);  // nota = 25
+        notas = edr.notas();
+        double[] esperado2 = new double[]{25.0, 0.0, 0.0, 0.0};
+        assertTrue(Arrays.equals(notas, esperado2));
+    }
+
 
     @Test
     void los_alumnos_resuelven_varios_problemas() {
@@ -467,6 +487,21 @@ class EdrTests {
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
+
+    //agregamos este test
+    @Test
+    void solo_los_primeros_n_copian_de_la_darkweb() {
+        double[] esperado;
+
+        edr.consultarDarkWeb(2, solucion);
+
+        double[] notas = edr.notas();
+
+        //solo se copian los 2 con mayor puntaje
+        esperado = new double[]{100.0, 100.0, 0.0, 0.0};
+
+        assertTrue(Arrays.equals(notas, esperado));
+}
 
     @Test 
     void varios_alumnos_se_copian_de_la_darkweb(){
