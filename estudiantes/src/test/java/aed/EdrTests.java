@@ -133,36 +133,35 @@ class EdrTests {
         assertTrue(Arrays.equals(notas_esperadas, notas));
     }
 
+    // Agregamos este test
     @Test
-void unico_estudiante_hace_examen_perfecto() {
-    int[] solucion = new int[]{0, 1, 2, 3};
-    Edr edr = new Edr(2, 1, solucion);
+    void unico_estudiante_hace_examen_perfecto() {
+        int[] solucion = new int[]{0, 1, 2, 3};
+        Edr edr = new Edr(2, 1, solucion);
 
-    // El unico estudiante responde perfecto
-    for (int i = 0; i < solucion.length; i++) {
-        edr.resolver(0, i, solucion[i]);
+        // El unico estudiante responde perfecto
+        for (int i = 0; i < solucion.length; i++) {
+            edr.resolver(0, i, solucion[i]);
+        }
+
+        double[] notas = edr.notas();
+        double[] notas_esperadas = new double[]{100.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+
+        edr.entregar(0);
+
+        int[] copiones = edr.chequearCopias();
+        int[] copiones_esperados = new int[]{};
+        assertTrue(Arrays.equals(copiones_esperados, copiones));
+
+        // Corregir devuelve la única nota
+        NotaFinal[] notas_finales = edr.corregir();
+        NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
+            new NotaFinal(100.0, 0)
+        };
+
+        assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
-
-    double[] notas = edr.notas();
-    double[] notas_esperadas = new double[]{100.0};
-    assertTrue(Arrays.equals(notas_esperadas, notas));
-
-    edr.entregar(0);
-
-    int[] copiones = edr.chequearCopias();
-    int[] copiones_esperados = new int[]{};
-    assertTrue(Arrays.equals(copiones_esperados, copiones));
-
-    // Corregir devuelve la única nota
-    NotaFinal[] notas_finales = edr.corregir();
-    NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-        new NotaFinal(100.0, 0)
-    };
-
-    assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
-}
-
-
 
     // Agregamos este test
     @Test
@@ -172,8 +171,8 @@ void unico_estudiante_hace_examen_perfecto() {
 
         assertTrue(Arrays.equals(notas_esperadas, notas));
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < solucion.length; i++) {
+            for (int j = 0; j < cant_alumnos; j++) {
                 edr.resolver(j, i, i);
             }
         }
@@ -185,13 +184,17 @@ void unico_estudiante_hace_examen_perfecto() {
 
         entreganTodos();
 
+        int[] copiones = edr.chequearCopias();
+        int[] copiones_esperados = new int[cant_alumnos];
+
+        for (int i = 0; i < cant_alumnos; i++) {
+            copiones_esperados[i] = i;
+        }
+
+        assertTrue(Arrays.equals(copiones, copiones_esperados));
+
         NotaFinal[] notas_finales = edr.corregir();
-        NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
-            new NotaFinal(100,3),
-            new NotaFinal(100,2),
-            new NotaFinal(100, 1),
-            new NotaFinal(100,0)
-        };
+        NotaFinal[] notas_finales_esperadas = new NotaFinal[0];
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
