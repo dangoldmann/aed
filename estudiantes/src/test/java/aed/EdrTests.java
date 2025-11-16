@@ -105,6 +105,65 @@ class EdrTests {
         assertTrue(Arrays.equals(notas, esperado2));
     }
 
+    //Agregamos este test
+    @Test
+    void consultar_darkweb_reemplaza_k_peores() { 
+        int[] solucion = new int[]{0, 1, 2, 3, 4};  // 5 ejercicios, 20 puntos c/u
+        Edr edr = new Edr(3, 4, solucion);
+
+        edr.resolver(0, 0, 0);
+        edr.resolver(0, 1, 1);
+        edr.resolver(1, 0, 0);
+        edr.resolver(2, 0, 9);
+        edr.resolver(3, 0, 9);
+
+        double[] notas = edr.notas();
+        double[] notas_esperadas = new double[]{40.0, 20.0, 0.0, 0.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+
+        // Examen perfecto de la DW
+        int[] examenDW = new int[]{0, 1, 2, 3, 4};
+
+        // Los 3 peores reemplazan su examen
+        edr.consultarDarkWeb(3, examenDW);
+
+        notas = edr.notas();
+        // Los estudiantes 1, 2 y 3 ahora tienen el examen perfecto -> 100
+        notas_esperadas = new double[]{40.0, 100.0, 100.0, 100.0};
+        assertTrue(Arrays.equals(notas_esperadas, notas));
+    }
+
+    @Test
+void unico_estudiante_hace_examen_perfecto() {
+    int[] solucion = new int[]{0, 1, 2, 3};
+    Edr edr = new Edr(2, 1, solucion);
+
+    // El unico estudiante responde perfecto
+    for (int i = 0; i < solucion.length; i++) {
+        edr.resolver(0, i, solucion[i]);
+    }
+
+    double[] notas = edr.notas();
+    double[] notas_esperadas = new double[]{100.0};
+    assertTrue(Arrays.equals(notas_esperadas, notas));
+
+    edr.entregar(0);
+
+    int[] copiones = edr.chequearCopias();
+    int[] copiones_esperados = new int[]{};
+    assertTrue(Arrays.equals(copiones_esperados, copiones));
+
+    // Corregir devuelve la única nota
+    NotaFinal[] notas_finales = edr.corregir();
+    NotaFinal[] notas_finales_esperadas = new NotaFinal[]{
+        new NotaFinal(100.0, 0)
+    };
+
+    assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
+}
+
+
+
     // Agregamos este test
     @Test
     void alumnos_resuelven_examen_perfecto() {

@@ -305,8 +305,12 @@ public class Edr {
 
     public int[] chequearCopias() {
         int[][] tablaRespuestas = armarTablaRespuestas();                   // O(E * R)
-
         ArrayList<Integer> copiones = new ArrayList<>();                    // O(1)
+
+        int n = handlesEstudiantes.size();                                  // O(1)
+        if (n <= 1) {                                                       // O(1)
+            return new int[0];    // con 0 o 1 alumno, nunca hay copiones   // O(1)
+        }
 
         for (int i = 0; i < handlesEstudiantes.size(); i++) {               // O(E)
             int[] examen = handlesEstudiantes.get(i).valor().examen();      // O(1)
