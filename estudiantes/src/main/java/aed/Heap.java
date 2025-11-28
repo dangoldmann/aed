@@ -54,7 +54,7 @@ public class Heap<T extends Comparable<T>> {
         ArrayList<Heap<Estudiante>.HandleHeap> handlesOrdenados = new ArrayList<Heap<Estudiante>.HandleHeap>(elementos.size());     // O(1)
         for (int i = 0; i < handles.size(); i++) {                                                                                  // O(E)
             Heap<Estudiante>.HandleHeap handle = (Heap<Estudiante>.HandleHeap) handles.get(i);                                      // O(1)
-            handles.set(handle.valor().id(), handle);                                                                               // O(1)
+            handlesOrdenados.add(handle.valor().id(), handle);                                                                               // O(1)
         }
 
         return handlesOrdenados;                                                                                                     // O(1)

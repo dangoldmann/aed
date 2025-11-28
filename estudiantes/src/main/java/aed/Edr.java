@@ -180,9 +180,9 @@ public class Edr {
 
     public void entregar(int estudiante) {
         Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);                        // O(1)
-        Estudiante e = handle.valor();                                                                  // O(1)
-        e.entregar();                                                                                   // O(1)
-        handle.modificarValor();                                                                        // O(log(E))
+        Estudiante eCopia = new Estudiante(handle.valor());                                             // O(1)
+        eCopia.entregar();                                                                              // O(1)
+        handle.modificarValor(eCopia);                                                                  // O(log(E))
     }
 
 //-----------------------------------------------------CORREGIR---------------------------------------------------------
