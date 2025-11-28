@@ -22,7 +22,8 @@ public class Heap<T extends Comparable<T>> {
             return this.posicion;
         }
 
-        public void modificarValor() {
+        public void modificarValor(T v) {
+            valor = v;
             modificar(posicion);
         }
     }
@@ -33,6 +34,14 @@ public class Heap<T extends Comparable<T>> {
             HandleHeap handle = new HandleHeap(valores[i], i);              // O(1)
             elementos.add(i, handle);                                       // O(1)
         }
+
+        this.heapify(elementos);                                            // O(E)
+    }
+
+    private void heapify(ArrayList<HandleHeap> a) {
+        for (int i = a.size() / 2 - 1; i >= 0; i--) {
+            siftDown(a.get(i));
+        }
     }
 
     public ArrayList<Heap<Estudiante>.HandleHeap> obtenerHandles() {
@@ -42,7 +51,13 @@ public class Heap<T extends Comparable<T>> {
             handles.add(i, handle);                                                                                         // O(1)
         }
 
-        return handles;                                                                                                     // O(1)
+        ArrayList<Heap<Estudiante>.HandleHeap> handlesOrdenados = new ArrayList<Heap<Estudiante>.HandleHeap>(elementos.size());     // O(1)
+        for (int i = 0; i < handles.size(); i++) {                                                                                  // O(E)
+            Heap<Estudiante>.HandleHeap handle = (Heap<Estudiante>.HandleHeap) handles.get(i);                                      // O(1)
+            handles.set(handle.valor().id(), handle);                                                                               // O(1)
+        }
+
+        return handlesOrdenados;                                                                                                     // O(1)
     }
 
     private void intercambiarPosiciones(HandleHeap h1, HandleHeap h2) {

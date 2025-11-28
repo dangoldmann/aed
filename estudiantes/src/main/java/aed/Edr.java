@@ -133,10 +133,10 @@ public class Edr {
         int[] respuestaACopiarse = obtenerRespuestaACopiarse(idVecinoConMasRespuestas, estudiante);              // O(R)
 
         Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);                                 // O(1)
-        Estudiante e = handle.valor();                                                                           // O(1)
-        e.responderPregunta(respuestaACopiarse[0], respuestaACopiarse[1]);                                       // O(1)
-        e.actualizarPuntaje(calcularPuntaje(e.examen()));                                                        // O(R)
-        handle.modificarValor();                                                                                 // O(log (E))
+        Estudiante eCopia = new Estudiante(handle.valor());                                                      // O(1)
+        eCopia.responderPregunta(respuestaACopiarse[0], respuestaACopiarse[1]);                                  // O(1)
+        eCopia.actualizarPuntaje(calcularPuntaje(eCopia.examen()));                                              // O(R)
+        handle.modificarValor(eCopia);                                                                           // O(log (E))
     }
 
 
@@ -147,10 +147,10 @@ public class Edr {
 
     public void resolver(int estudiante, int NroEjercicio, int res) {
         Heap<Estudiante>.HandleHeap handle = handlesEstudiantes.get(estudiante);                // O(1)
-        Estudiante e = handle.valor();                                                          // O(1)
-        e.responderPregunta(NroEjercicio, res);                                                 // O(1)
-        e.actualizarPuntaje(calcularPuntaje(e.examen()));                                       // O(1)
-        handle.modificarValor();                                                                // O(log(E))
+        Estudiante eCopia = new Estudiante(handle.valor());                                     // O(1)
+        eCopia.responderPregunta(NroEjercicio, res);                                            // O(1)
+        eCopia.actualizarPuntaje(calcularPuntaje(eCopia.examen()));                             // O(1)
+        handle.modificarValor(eCopia);                                                          // O(log(E))
     }
 
 
