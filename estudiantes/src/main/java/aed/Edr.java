@@ -26,7 +26,12 @@ public class Edr {
         }
         
         estudiantes = new Heap<Estudiante>(tempEstudiantes);                                        // O(E)
-        handlesEstudiantes = estudiantes.obtenerHandles();                                          // O(E)
+        ArrayList<Heap<Estudiante>.HandleHeap> handlesDesordenados = estudiantes.obtenerHandles();  // O(E)
+
+        for (int i = 0; i < handlesDesordenados.size(); i++) {                                      // O(E)
+            Heap<Estudiante>.HandleHeap handle = handlesDesordenados.get(i);                        // O(1)
+            handlesEstudiantes.add(handle.valor().id(), handle);                                    // O(1)
+        }
     }
 
 //-------------------------------------------------NOTAS--------------------------------------------------------------------------

@@ -44,20 +44,14 @@ public class Heap<T extends Comparable<T>> {
         }
     }
 
-    public ArrayList<Heap<Estudiante>.HandleHeap> obtenerHandles() {
-        ArrayList<Heap<Estudiante>.HandleHeap> handles = new ArrayList<Heap<Estudiante>.HandleHeap>(elementos.size());      // O(1)
-        for (int i = 0; i < elementos.size(); i++) {                                                                        // O(E)
-            Heap<Estudiante>.HandleHeap handle = (Heap<Estudiante>.HandleHeap) elementos.get(i);                            // O(1)
-            handles.add(i, handle);                                                                                         // O(1)
+    public ArrayList<HandleHeap> obtenerHandles() {
+        ArrayList<HandleHeap> handles = new ArrayList<HandleHeap>(elementos.size());      // O(1)
+        for (int i = 0; i < elementos.size(); i++) {                                      // O(E)
+            HandleHeap handle = elementos.get(i);                                         // O(1)
+            handles.add(i, handle);                                                       // O(1)
         }
 
-        ArrayList<Heap<Estudiante>.HandleHeap> handlesOrdenados = new ArrayList<Heap<Estudiante>.HandleHeap>(elementos.size());     // O(1)
-        for (int i = 0; i < handles.size(); i++) {                                                                                  // O(E)
-            Heap<Estudiante>.HandleHeap handle = (Heap<Estudiante>.HandleHeap) handles.get(i);                                      // O(1)
-            handlesOrdenados.add(handle.valor().id(), handle);                                                                               // O(1)
-        }
-
-        return handlesOrdenados;                                                                                                     // O(1)
+        return handles;                                                                   // O(1)
     }
 
     private void intercambiarPosiciones(HandleHeap h1, HandleHeap h2) {
